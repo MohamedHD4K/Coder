@@ -9,6 +9,9 @@ import { BsPerson } from "react-icons/bs";
 import { MdEmail, MdPassword } from "react-icons/md";
 import InfiniteTextLoop from "../components/InfiniteTextLoop";
 import Image from "next/image";
+import { Marquee } from "../components/common/marquee";
+import { reviews } from "../../../lib/data/reviwes";
+import ReviewCard from "../components/common/ReviewCard";
 
 const codeSnippet = `const user = await register({ email, password });`;
 
@@ -37,7 +40,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="relative flex items-center justify-center min-h-screen">
+    <div className="relative flex items-center justify-center text-white">
       {/* Content Card */}
       <div className="relative z-10 w-full max-w-xl">
         <div className="bg-gray-900/70 backdrop-blur-md border border-gray-800 rounded-2xl overflow-hidden">
@@ -47,7 +50,7 @@ export default function RegisterPage() {
               <div className="max-w-md mx-auto">
                 {/* Header */}
                 <div className="mb-8">
-                  <h1 className="text-2xl mb-2">Get Started Now</h1>
+                  <h1 className="text-2xl mb-2">👋 Get Started Now</h1>
                   <p className="text-gray-400 text-xs">
                     Enter your credintials to access your account
                   </p>
@@ -176,6 +179,19 @@ export default function RegisterPage() {
             </div>
           </div>
         </div>
+      </div>
+       {/* Comments Loop */}
+      <div className="fixed flex h-full left-10 z-0 flex-row items-center justify-center overflow-hidden">
+        <Marquee pauseOnHover vertical className="[--duration:20s]">
+          {reviews.slice(0, reviews.length / 2).map((review) => (
+            <ReviewCard key={review.username} {...review} />
+          ))}
+        </Marquee>
+        <Marquee reverse pauseOnHover vertical className="[--duration:20s]">
+          {reviews.slice(reviews.length / 2).map((review) => (
+            <ReviewCard key={review.username} {...review} />
+          ))}
+        </Marquee>
       </div>
     </div>
   );

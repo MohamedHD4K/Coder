@@ -30,26 +30,22 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col h-screen`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col relative`}
       >
-        <div className="relative bg-gradient-to-bl from-[#040b2b] to-[#000000] min-h-screen w-full overflow-hidden">
-          <div
-            className="pointer-events-none absolute left-1/2 top-1/2 
+        <div
+          className="fixed pointer-events-none left-1/2 top-1/2 
           -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] 
           rounded-full bg-black/40 blur-3xl"
-          ></div>
+        />
 
-          <button
-            className="fixed z-20 text-2xl font-black p-4 px-8 text-gray-300 hover:text-white transition-colors duration-300 cursor-pointer"
-            onClick={() => router.push("/")}
-          >
-            Coder
-          </button>
-          {showNavbar && <Navbar />}
-          <div className="relative z-10 h-screen mx-auto flex flex-col">
-            {children}
+        <div className="flex flex-col justify-between bg-gradient-to-bl from-[#040b2b] to-[#000000] min-h-screen">
+          <div>
+            {showNavbar && <Navbar />}
+            <div className="mt-8 relative z-10 mx-auto flex flex-col h-full max-w-7xl px-4 pt-16 pb-8">
+              {children}
+            </div>
           </div>
-          {showNavbar && <Footer />}
+           {showNavbar && <Footer />}
         </div>
       </body>
     </html>

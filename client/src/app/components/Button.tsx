@@ -15,7 +15,7 @@ export default function Button({
     <button
       onClick={onClick}
       className={`border border-gray-600 text-white flex flex-row items-center justify-center cursor-pointer hover:bg-black/20
-         gap-3 shadow-md hover:shadow-white/5 w-full px-4 py-2 rounded-lg text-sm duration-300 ${className}`}
+         gap-3 shadow-md hover:shadow-white/5 w-full px-4 py-2 rounded-full text-xs duration-300 ${className}`}
     >
       {icon}
       {text}

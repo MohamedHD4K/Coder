@@ -3,19 +3,17 @@
 import { FaGithub, FaGoogle } from "react-icons/fa";
 import Button from "../components/Button";
 import Input from "../components/Input";
-import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { BsPerson } from "react-icons/bs";
 import { MdEmail, MdPassword } from "react-icons/md";
-import InfiniteTextLoop from "../components/InfiniteTextLoop";
-import Image from "next/image";
-
-const codeSnippet = `const user = await register({ email, password });`;
+import { Marquee } from "../components/common/marquee";
+import ReviewCard from "../components/common/ReviewCard";
+import { reviews } from "../../../lib/data/reviwes";
 
 export default function RegisterPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [checked, setChecked] = useState(false);
-  const [change, setChange] = useState(false);
+  const [useUsername, setUseUsername] = useState(false);
   const [formValues, setFormValues] = useState({
     username: "",
     email: "",
@@ -25,32 +23,34 @@ export default function RegisterPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!checked) return;
     setIsLoading(true);
+
     console.log("Form submitted");
     console.log("Form values:", formValues, "Terms accepted:", checked);
+
     setIsLoading(false);
   };
 
   const handleValuesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormValues((prev) => ({ ...prev, [name]: value }));
-    console.log(`Field ${name} changed to ${value}`);
   };
 
   return (
-    <div className="relative flex items-center justify-center min-h-screen">
+    <div className="relative flex flex-col items-center gap-5 text-white justify-center ">
       {/* Content Card */}
       <div className="relative z-10 w-full max-w-xl">
         <div className="bg-gray-900/70 backdrop-blur-md border border-gray-800 rounded-2xl overflow-hidden">
           <div className="flex flex-col lg:flex-row">
             {/* Form Side */}
-            <div className="flex-1 p-16 sm:p-10 ">
+            <div className="flex-1 p-16 sm:p-10">
               <div className="max-w-md mx-auto">
                 {/* Header */}
                 <div className="mb-8">
-                  <h1 className="text-2xl mb-2">Continue Your Journey</h1>
+                  <h1 className="text-2xl mb-2">👋 Create Your Account</h1>
                   <p className="text-gray-400 text-xs">
-                    Enter your credintials to login your account
+                    Enter your credentials to register
                   </p>
                 </div>
 
@@ -77,10 +77,8 @@ export default function RegisterPage() {
 
                 {/* Form */}
                 <form className="space-y-4" onSubmit={handleSubmit}>
-                  <div className="flex flex-col sm:grid-cols-2 gap-5"></div>
-
                   <div>
-                    {change ? (
+                    {useUsername ? (
                       <Input
                         placeHolder="john doe"
                         id="username"
@@ -101,10 +99,11 @@ export default function RegisterPage() {
                       />
                     )}
                     <button
-                      onClick={() => setChange((prev) => !prev)}
+                      type="button"
+                      onClick={() => setUseUsername((prev) => !prev)}
                       className="text-xs hover:underline cursor-pointer text-blue-400"
                     >
-                      Or use your email
+                      {useUsername ? "Or use your email" : "Or use a username"}
                     </button>
                   </div>
 
@@ -119,10 +118,25 @@ export default function RegisterPage() {
                       isPassword
                       icon={<MdPassword className="text-gray-500" size={15} />}
                     />
-                    <button className="text-xs hover:underline cursor-pointer text-blue-400">
-                      Forget me password
+                    <button
+                      type="button"
+                      className="text-xs hover:underline cursor-pointer text-blue-400"
+                    >
+                      Forgot password?
                     </button>
                   </div>
+
+                  {/* Confirm Password */}
+                  <Input
+                    placeHolder="repeat password"
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    label="Confirm Password"
+                    type="password"
+                    onChange={handleValuesChange}
+                    isPassword
+                    icon={<MdPassword className="text-gray-500" size={15} />}
+                  />
 
                   <div className="flex items-center mb-4">
                     <input
@@ -130,14 +144,9 @@ export default function RegisterPage() {
                       name="terms"
                       type="checkbox"
                       checked={checked}
-                      onChange={(e) => {
-                        const isChecked = e.target.checked;
-                        setChecked(isChecked);
-                        console.log("Checked now:", isChecked);
-                      }}
+                      onChange={(e) => setChecked(e.target.checked)}
                       className="w-4 h-4 rounded-full bg-gray-700 border-gray-600 focus:ring-blue-500"
                     />
-
                     <label
                       htmlFor="terms"
                       className="ml-2 text-sm text-gray-300"
@@ -160,7 +169,7 @@ export default function RegisterPage() {
                   </div>
 
                   <Button
-                    text={isLoading ? "Login Account..." : "Login Account"}
+                    text={isLoading ? "Creating Account..." : "Log In"}
                     className={`w-full justify-center py-3 bg-blue-600 hover:bg-blue-700 transition-colors 
                     ${
                       isLoading || !checked
@@ -182,6 +191,19 @@ export default function RegisterPage() {
             </div>
           </div>
         </div>
+      </div>
+      {/* Comments Loop */}
+      <div className="fixed flex h-full right-10 z-0 flex-row items-center justify-center overflow-hidden">
+        <Marquee pauseOnHover vertical className="[--duration:20s]">
+          {reviews.slice(0, reviews.length / 2).map((review) => (
+            <ReviewCard key={review.username} {...review} />
+          ))}
+        </Marquee>
+        <Marquee reverse pauseOnHover vertical className="[--duration:20s]">
+          {reviews.slice(reviews.length / 2).map((review) => (
+            <ReviewCard key={review.username} {...review} />
+          ))}
+        </Marquee>
       </div>
     </div>
   );
